@@ -12,3 +12,15 @@ How-to videos for the browser diagnostics site **https://bmw-e36-diag.pages.dev*
 | English | [mp4](videos/BMW-E36-how-to-use-en.mp4) | [mp4](videos/BMW-E36-how-to-use-en-9x16.mp4) |
 
 Independent site, not affiliated with BMW AG. The data shown in the videos are sample data.
+
+## Banners
+
+For posts in Facebook / Instagram / Telegram / Viber / WhatsApp. `<lang>` = `ru`, `uk`, `pl`, `en`.
+
+| File | Size | Use |
+|---|---|---|
+| `banners/bmw-e36-square-<lang>.png` | 1080×1080 | feed posts, messengers |
+| `banners/bmw-e36-portrait-<lang>.png` | 1080×1350 | Facebook / Instagram feed (4:5) |
+| `banners/bmw-e36-wide-<lang>.png` | 1200×630 | link posts, link preview |
+| `banners/bmw-e36-story-<lang>.png` | 1080×1920 | stories, WhatsApp status |
+| `banners/og-image-<lang>.jpg` | 1200×630 | `og:image` link preview (≈100 KB) |
