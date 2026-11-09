@@ -117,7 +117,7 @@ const T = {
     p4: '<b>Coding</b>Compared with the car’s equipment, written one function at a time with a backup.',
     foot: 'Independent site, not affiliated with BMW AG. The data in the video are sample data. Working on the car is at your own risk.', htmlTitle: 'BMW E36 diagnostics — video' },
 };
-const LANGS = ['ru', 'uk', 'pl', 'en'];
+const LANGS = ['uk', 'pl', 'en', 'ru'];   // порядок кнопок: украинский, польский, английский, русский (решение пользователя 09.11)
 const q = new URLSearchParams(location.search);
 const nav = (navigator.language || '').slice(0, 2);
 let lang = LANGS.includes(q.get('lang')) ? q.get('lang') : LANGS.includes(nav) ? nav : 'en';
