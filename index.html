@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Диагностика BMW E36 — видео</title>
+<meta name="description" content="Как пользоваться сайтом диагностики BMW E36: кабель K-line, скан блоков, ошибки, тесты, кодирование. RU · UK · PL · EN." />
+<link rel="icon" type="image/png" href="img/icon-192.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<!--
+  Страница с роликами «Как пользоваться» для GitHub Pages (репозиторий bmw-e36-video).
+  ?lang=ru|uk|pl|en — язык; ?format=v — вертикальный ролик. На телефоне в портретной ориентации вертикальный включается сам.
+  Ролики — videos/*.mp4 (собирает promo/render.mjs в проекте сайта).
+-->
+<style>
+:root {
+  color-scheme: dark;
+  --bg: #070b14; --surface: rgba(255,255,255,.045); --border: rgba(255,255,255,.1);
+  --text: #f2f5fa; --text-2: #b9c3d4; --muted: #7d889b;
+  --accent: #2f8cff; --accent-2: #1c69d4; --m-red: #e3262e;
+  --font: 'Exo 2', 'Segoe UI', Arial, sans-serif;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { min-height: 100vh; background: radial-gradient(1100px 700px at 20% -10%, #15284a 0%, var(--bg) 60%) fixed, var(--bg);
+  color: var(--text); font-family: var(--font); }
+.mstripe { height: 4px; background: linear-gradient(90deg, #6fb5ff 0 33%, var(--accent-2) 33% 66%, var(--m-red) 66%); }
+.wrap { max-width: 1100px; margin: 0 auto; padding: 22px 16px 40px; }
+header { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+header img { width: 52px; height: 52px; border-radius: 50%; }
+header .brand { font-size: 22px; font-weight: 600; letter-spacing: .01em; }
+header .brand small { display: block; font-size: 13px; font-weight: 400; color: var(--muted); letter-spacing: .04em; }
+.langs { margin-left: auto; display: flex; gap: 4px; }
+.langs button, .fmt button { font: 600 14px var(--font); color: var(--text-2); background: var(--surface); border: 1px solid var(--border);
+  border-radius: 8px; padding: 7px 11px; cursor: pointer; }
+.langs button.on, .fmt button.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+h1 { font-size: clamp(28px, 5vw, 46px); font-weight: 300; margin: 26px 0 8px; line-height: 1.15; }
+.lead { color: var(--text-2); font-size: 17px; line-height: 1.5; margin: 0 0 18px; max-width: 760px; }
+.fmt { display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; align-items: center; }
+.fmt span { color: var(--muted); font-size: 14px; margin-right: 4px; }
+.player { background: #000; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,.5); margin: 0 auto; }
+.player.h { aspect-ratio: 16 / 9; width: 100%; }
+.player.v { aspect-ratio: 9 / 16; width: min(100%, 420px); }
+video { width: 100%; height: 100%; display: block; background: #000; }
+.row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
+.btn { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; font: 600 16px var(--font); padding: 12px 20px; border-radius: 10px;
+  background: var(--accent); color: #fff; border: 1px solid var(--accent); }
+.btn.sec { background: var(--surface); color: var(--text); border-color: var(--border); }
+.points { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-top: 26px; padding: 0; list-style: none; }
+.points li { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; color: var(--text-2); font-size: 15px; line-height: 1.45; }
+.points b { color: var(--text); font-weight: 600; display: block; margin-bottom: 4px; font-size: 16px; }
+footer { margin-top: 30px; color: var(--muted); font-size: 13px; line-height: 1.6; }
+@media (max-width: 560px) { .langs { margin-left: 0; width: 100%; } header img { width: 44px; height: 44px; } }
+</style>
+</head>
+<body>
+<div class="mstripe"></div>
+<div class="wrap">
+  <header>
+    <img src="img/icon-192.png" alt="" />
+    <div class="brand" data-t="brand"></div>
+    <div class="langs" id="langs"></div>
+  </header>
+
+  <h1 data-t="title"></h1>
+  <p class="lead" data-t="lead"></p>
+
+  <div class="fmt"><span data-t="format"></span><button data-f="h">▭ 16:9</button><button data-f="v">▯ 9:16</button></div>
+  <div class="player h" id="player"><video id="video" controls playsinline preload="metadata"></video></div>
+
+  <div class="row">
+    <a class="btn" href="https://bmw-e36-diag.pages.dev/" target="_blank" rel="noopener" data-t="open"></a>
+    <a class="btn sec" id="download" download data-t="download"></a>
+  </div>
+
+  <ul class="points">
+    <li data-t="p1"></li><li data-t="p2"></li><li data-t="p3"></li><li data-t="p4"></li>
+  </ul>
+
+  <footer data-t="foot"></footer>
+</div>
+
+<script>
+const FILES = { ru: 'BMW-E36-kak-polzovatsya-ru', uk: 'BMW-E36-yak-korystuvatysya-uk', pl: 'BMW-E36-jak-korzystac-pl', en: 'BMW-E36-how-to-use-en' };
+const T = {
+  ru: { brand: 'Диагностика BMW E36<small>BMW · K-line · в браузере</small>', title: 'Как пользоваться программой',
+    lead: 'Короткий ролик: подключение кабеля K-line, чтение данных машины, скан блоков, память ошибок и стирание, живые данные двигателя, кодирование и отчёт в PDF.',
+    format: 'Формат:', open: 'Открыть сайт', download: 'Скачать видео',
+    p1: '<b>Без установки программ</b>Работает в Chrome, Edge или Opera на Windows, macOS и Linux — без INPA и старых драйверов.',
+    p2: '<b>Ошибки и стирание</b>Коды с пояснениями, стирание — только с подтверждением.',
+    p3: '<b>Тесты и живые данные</b>Тесты блоков по подтверждению, значения двигателя в реальном времени.',
+    p4: '<b>Кодирование</b>Сравнение с комплектацией машины, запись по одной функции с копией.',
+    foot: 'Независимый сайт, не связан с BMW AG. Данные в ролике — демонстрационные. Работа с машиной — на ваш риск.', htmlTitle: 'Диагностика BMW E36 — видео' },
+  uk: { brand: 'Діагностика BMW E36<small>BMW · K-line · у браузері</small>', title: 'Як користуватися програмою',
+    lead: 'Короткий ролик: підключення кабелю K-line, читання даних машини, сканування блоків, пам’ять помилок і стирання, живі дані двигуна, кодування та звіт у PDF.',
+    format: 'Формат:', open: 'Відкрити сайт', download: 'Завантажити відео',
+    p1: '<b>Без встановлення програм</b>Працює в Chrome, Edge або Opera на Windows, macOS і Linux — без INPA та старих драйверів.',
+    p2: '<b>Помилки та стирання</b>Коди з поясненнями, стирання — лише з підтвердженням.',
+    p3: '<b>Тести й живі дані</b>Тести блоків за підтвердженням, значення двигуна в реальному часі.',
+    p4: '<b>Кодування</b>Порівняння з комплектацією машини, запис по одній функції з копією.',
+    foot: 'Незалежний сайт, не пов’язаний з BMW AG. Дані в ролику — демонстраційні. Робота з машиною — на ваш ризик.', htmlTitle: 'Діагностика BMW E36 — відео' },
+  pl: { brand: 'Diagnostyka BMW E36<small>BMW · K-line · w przeglądarce</small>', title: 'Jak korzystać z programu',
+    lead: 'Krótki film: podłączenie kabla K-line, odczyt danych auta, skan sterowników, pamięć błędów i kasowanie, dane silnika na żywo, kodowanie i raport PDF.',
+    format: 'Format:', open: 'Otwórz stronę', download: 'Pobierz film',
+    p1: '<b>Bez instalowania programów</b>Działa w Chrome, Edge lub Opera na Windows, macOS i Linux — bez INPA i starych sterowników.',
+    p2: '<b>Błędy i kasowanie</b>Kody z objaśnieniami, kasowanie — tylko po potwierdzeniu.',
+    p3: '<b>Testy i dane na żywo</b>Testy sterowników po potwierdzeniu, wartości silnika w czasie rzeczywistym.',
+    p4: '<b>Kodowanie</b>Porównanie z wyposażeniem auta, zapis po jednej funkcji z kopią.',
+    foot: 'Niezależna strona, niezwiązana z BMW AG. Dane w filmie są przykładowe. Praca z samochodem — na własne ryzyko.', htmlTitle: 'Diagnostyka BMW E36 — film' },
+  en: { brand: 'BMW E36 diagnostics<small>BMW · K-line · in the browser</small>', title: 'How to use the program',
+    lead: 'A short video: connecting the K-line cable, reading the car data, scanning modules, fault memory and clearing, live engine data, coding and a PDF report.',
+    format: 'Format:', open: 'Open the site', download: 'Download the video',
+    p1: '<b>Nothing to install</b>Runs in Chrome, Edge or Opera on Windows, macOS and Linux — no INPA, no outdated drivers.',
+    p2: '<b>Faults and clearing</b>Codes with explanations, clearing only after confirmation.',
+    p3: '<b>Tests and live data</b>Module tests after confirmation, engine values in real time.',
+    p4: '<b>Coding</b>Compared with the car’s equipment, written one function at a time with a backup.',
+    foot: 'Independent site, not affiliated with BMW AG. The data in the video are sample data. Working on the car is at your own risk.', htmlTitle: 'BMW E36 diagnostics — video' },
+};
+const LANGS = ['ru', 'uk', 'pl', 'en'];
+const q = new URLSearchParams(location.search);
+const nav = (navigator.language || '').slice(0, 2);
+let lang = LANGS.includes(q.get('lang')) ? q.get('lang') : LANGS.includes(nav) ? nav : 'en';
+let fmt = q.get('format') === 'v' || (!q.has('format') && matchMedia('(orientation: portrait)').matches && innerWidth < 700) ? 'v' : 'h';
+
+const video = document.getElementById('video');
+document.getElementById('langs').innerHTML = LANGS.map((l) => `<button data-l="${l}">${l.toUpperCase()}</button>`).join('');
+document.querySelectorAll('[data-l]').forEach((b) => b.onclick = () => { lang = b.dataset.l; apply(true); });
+document.querySelectorAll('[data-f]').forEach((b) => b.onclick = () => { fmt = b.dataset.f; apply(true); });
+
+function apply(keepTime) {
+  const L = T[lang];
+  document.documentElement.lang = lang;
+  document.title = L.htmlTitle;
+  document.querySelectorAll('[data-t]').forEach((e) => { e.innerHTML = L[e.dataset.t]; });
+  document.querySelectorAll('[data-l]').forEach((b) => b.classList.toggle('on', b.dataset.l === lang));
+  document.querySelectorAll('[data-f]').forEach((b) => b.classList.toggle('on', b.dataset.f === fmt));
+  document.getElementById('player').className = 'player ' + fmt;
+  const src = `videos/${FILES[lang]}${fmt === 'v' ? '-9x16' : ''}.mp4`;
+  if (!video.src.endsWith(src)) {
+    const t = keepTime ? video.currentTime : 0, playing = keepTime && !video.paused;
+    video.src = src;
+    if (t) video.addEventListener('loadedmetadata', () => { video.currentTime = t; if (playing) video.play().catch(() => {}); }, { once: true });
+  }
+  document.getElementById('download').href = src;
+  try { history.replaceState(null, '', `?lang=${lang}${fmt === 'v' ? '&format=v' : ''}`); } catch (e) {}
+}
+apply(false);
+</script>
+</body>
+</html>
